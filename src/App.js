@@ -1,28 +1,39 @@
 import React, { Component } from 'react';
 import posts from './posts'
 
-
-// Modifica el componente App para implmentar la funcionalidad requerida
-
 class App extends Component {
+constructor(){
+  super()
+  this.state ={
+    search:''
+  };
+}
+updateSearch(event){
+  this.setState({search:event.target.value.substr(0,20)})
+};
+
+renderlist(post,index){
+  return(
+    <li key={index}><a href={post.url}><img src={post.image }/></a>
+    <p>{ post.title }</p></li>
+    )
+}
   render() {
-    return (
-      <div>
-        <div className="filter">
-          <input type="text" placeholder="Ingresa el término de búsqueda" />
-        </div>
+    let filteredlist = posts.filter((post)=>{
+      return post.title.toLowerCase().indexOf(this.state.search.toLowerCase())!== -1;});
+      return (
+       <div>
+          <div className="filter">
+           <input type="text" placeholder="Ingresa el término de búsqueda" 
+           value={this.state.search} onChange={this.updateSearch.bind(this)} />
+          </div>
         <ul>
-          <li>
-            <a href={posts[0].url}><img src={posts[0].image } /></a>
-            <p>{ posts[0].title }</p>
-          </li>
+        {filteredlist.map(this.renderlist)}
         </ul>
       </div>
     )
   }
 }
-
-
 export default App
 
 
